@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Management System | Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary: #4e73df;
+            --success: #1cc88a;
+            --info: #36b9cc;
+            --warning: #f6c23e;
+            --danger: #e74a3b;
+            --secondary: #858796;
+            --light: #f8f9fc;
+            --dark: #5a5c69;
+            --sidebar-bg: #fff;
+            --content-bg: #f5f7fb;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--content-bg);
+            color: #444;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        .brand-text {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: var(--sidebar-bg);
+            border-right: 1px solid #edf2f7;
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 3rem;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .nav-link-custom {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 15px;
+            color: var(--secondary);
+            text-decoration: none;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-link-custom:hover,
+        .nav-link-custom.active {
+            background: #f0f4ff;
+            color: var(--primary);
+        }
+
+        .logout-link {
+            margin-top: auto;
+            color: var(--danger);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 1.5rem 1rem;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: #eee;
+            object-fit: cover;
+        }
+
+        /* Cards */
+        .stats-card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid #f1f4f8;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .stats-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bg-soft-blue {
+            background: #eef2ff;
+            color: #4e73df;
+        }
+
+        .bg-soft-green {
+            background: #e6f9f0;
+            color: #1cc88a;
+        }
+
+        .bg-soft-teal {
+            background: #e0faff;
+            color: #36b9cc;
+        }
+
+        .bg-soft-orange {
+            background: #fff4e6;
+            color: #fd7e14;
+        }
+
+        .stats-info h3 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .stats-info span {
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Glassmorphism Sections */
+        .dashboard-section {
+            background: white;
+            border-radius: 24px;
+            padding: 2rem;
+            border: 1px solid #f1f4f8;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.03);
+            height: 100%;
+        }
+
+        .table-custom thead th {
+            border: none;
+            color: var(--secondary);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            padding-bottom: 1.5rem;
+        }
+
+        .table-custom tbody td {
+            vertical-align: middle;
+            padding: 1rem 0;
+            border-top: 1px solid #f8f9fa;
+        }
+
+        .patient-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .patient-img {
+            width: 35px;
+            height: 35px;
+            border-radius: 10px;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-admitted {
+            background: #e6f9f0;
+            color: #1cc88a;
+        }
+
+        .status-discharged {
+            background: #f8f9fa;
+            color: #858796;
+        }
+
+        .status-pending {
+            background: #fff4e6;
+            color: #fd7e14;
+        }
+
+        /* Calendar Widget */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-top: 1.5rem;
+        }
+
+        .day-header {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--secondary);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .appointment-slot {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 0.75rem;
+            border-left: 4px solid #ddd;
+        }
+
+        .slot-blue {
+            border-left-color: var(--primary);
+            background: #f0f4ff;
+        }
+
+        .slot-green {
+            border-left-color: var(--success);
+            background: #e6f9f0;
+        }
+
+        .slot-purple {
+            border-left-color: #6f42c1;
+            background: #f3e8ff;
+        }
+
+        .slot-orange {
+            border-left-color: #fd7e14;
+            background: #fff4e6;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">
+                    <i data-lucide="plus-square"></i>
+                </div>
+                <h4 class="brand-text m-0">MedTrack.</h4>
+            </div>
+
+            <nav>
+                <a href="#" class="nav-link-custom active">
+                    <i data-lucide="layout-dashboard"></i> Dashboard
+                </a>
+                <a href="#" class="nav-link-custom">
+                    <i data-lucide="users"></i> Patients
+                </a>
+                <a href="#" class="nav-link-custom">
+                    <i data-lucide="user-cog"></i> Doctors
+                </a>
+                <a href="#" class="nav-link-custom">
+                    <i data-lucide="calendar"></i> Appointments
+                </a>
+                <a href="#" class="nav-link-custom">
+                    <i data-lucide="credit-card"></i> Billing
+                </a>
+            </nav>
+
+            <a href="#" class="nav-link-custom logout-link mt-auto">
+                <i data-lucide="log-out"></i> Logout
+            </a>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <div>
+                    <h2 class="fw-bold mb-1">Hospital Management System</h2>
+                    <p class="text-secondary small m-0">Monday, July 12, 2024</p>
+                </div>
+                <div class="user-profile">
+                    <div class="d-none d-lg-block text-end">
+                        <p class="fw-bold m-0 lh-1">Dr. Smith</p>
+                        <span class="text-secondary small">Head Surgeon</span>
+                    </div>
+                    <img src="https://i.pravatar.cc/150?u=drsmith" alt="Doctor" class="avatar">
+                </div>
+            </header>
+
+            <!-- Stats Row -->
+            <div class="row g-4 mb-5">
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <div class="stats-icon bg-soft-blue">
+                            <i data-lucide="users"></i>
+                        </div>
+                        <div class="stats-info">
+                            <span>Total Patients</span>
+                            <h3>1,250</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <div class="stats-icon bg-soft-green">
+                            <i data-lucide="calendar-check"></i>
+                        </div>
+                        <div class="stats-info">
+                            <span>Appointments</span>
+                            <h3>32</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <div class="stats-icon bg-soft-teal">
+                            <i data-lucide="stethoscope"></i>
+                        </div>
+                        <div class="stats-info">
+                            <span>Doctors</span>
+                            <h3>18</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <div class="stats-icon bg-soft-orange">
+                            <i data-lucide="dollar-sign"></i>
+                        </div>
+                        <div class="stats-info">
+                            <span>Revenue</span>
+                            <h3>$24.5k</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lower Sections -->
+            <div class="row g-4">
+                <!-- Patient List -->
+                <div class="col-lg-7">
+                    <div class="dashboard-section">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="fw-bold m-0">Patients List</h5>
+                            <button class="btn btn-sm btn-outline-primary rounded-pill px-3">View All</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-custom">
+                                <thead>
+                                    <tr>
+                                        <th>Patient</th>
+                                        <th>Age</th>
+                                        <th>Gender</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="patient-cell">
+                                                <img src="https://i.pravatar.cc/150?u=js" class="patient-img">
+                                                <span class="fw-medium">John Smith</span>
+                                            </div>
+                                        </td>
+                                        <td>22</td>
+                                        <td>Male</td>
+                                        <td><span class="status-badge status-admitted">Admitted</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="patient-cell">
+                                                <img src="https://i.pravatar.cc/150?u=lw" class="patient-img">
+                                                <span class="fw-medium">Lisa Wong</span>
+                                            </div>
+                                        </td>
+                                        <td>28</td>
+                                        <td>Female</td>
+                                        <td><span class="status-badge status-discharged">Discharged</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="patient-cell">
+                                                <img src="https://i.pravatar.cc/150?u=mb" class="patient-img">
+                                                <span class="fw-medium">Michael Brown</span>
+                                            </div>
+                                        </td>
+                                        <td>45</td>
+                                        <td>Male</td>
+                                        <td><span class="status-badge status-pending">Pending</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Schedule -->
+                <div class="col-lg-5">
+                    <div class="dashboard-section">
+                        <h5 class="fw-bold mb-4">Doctor Schedule</h5>
+                        <div class="calendar-grid">
+                            <div class="day-header">Mon</div>
+                            <div class="day-header">Tue</div>
+                            <div class="day-header">Wed</div>
+                            <div class="day-header">Thu</div>
+                            <div class="day-header">Fri</div>
+
+                            <div class="appointment-slot slot-blue">Dr. Patel<br>10:00 AM</div>
+                            <div></div>
+                            <div class="appointment-slot slot-green">Dr. Lee<br>11:30 AM</div>
+                            <div></div>
+                            <div class="appointment-slot slot-purple">Dr. Sharma<br>02:00 PM</div>
+
+                            <div></div>
+                            <div class="appointment-slot slot-orange">Dr. Kim<br>09:00 AM</div>
+                            <div></div>
+                            <div class="appointment-slot slot-blue">Dr. Brown<br>03:30 PM</div>
+                            <div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>
